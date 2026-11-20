@@ -37,6 +37,7 @@ Open the dev UI, pick `geo_news_agent` and ask something like "What's new with t
 ## Deploy to Vertex AI Agent Engine
 
 ```powershell
+pip install "google-adk[mcp,gcp]==2.15.0"   # the gcp extra provides the Agent Platform SDK the deploy needs
 gcloud services enable aiplatform.googleapis.com cloudresourcemanager.googleapis.com
 adk deploy agent_engine --project=<your-gcp-project-id> --region=us-central1 --display_name=geo-news-agent --otel_to_cloud geo_news_agent
 ```
