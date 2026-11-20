@@ -15,7 +15,8 @@ geo_news_agent/
   agent.py        # McpToolset + system prompt + root_agent
   __init__.py
   .env.example    # copy to .env and fill in
-requirements.txt
+  requirements.txt  # used by the Agent Engine deploy
+requirements.txt    # points to the agent's requirements for local installs
 ```
 
 ## Run locally
@@ -32,6 +33,17 @@ adk web .
 ```
 
 Open the dev UI, pick `geo_news_agent` and ask something like "What's new with the Russia–Ukraine war?". The events panel shows the `get_feeds` call and the tool response.
+
+## Deploy to Vertex AI Agent Engine
+
+```powershell
+gcloud services enable aiplatform.googleapis.com cloudresourcemanager.googleapis.com
+adk deploy agent_engine --project=<your-gcp-project-id> --region=us-central1 --display_name=geo-news-agent --otel_to_cloud geo_news_agent
+```
+
+The deploy reads `geo_news_agent/.env` and passes its values (including `MCP_API_KEY` and `MCP_URL`) to the deployed agent as environment variables. `--region` sets where Agent Engine runs; `GOOGLE_CLOUD_LOCATION=global` in `.env` still applies to the Gemini calls. It also needs `geo_news_agent/requirements.txt`, so the `[mcp]` extra is installed in the container.
+
+The deployed agent is listed under Vertex AI → Agent Engine in the Cloud Console.
 
 ## Configuration (`geo_news_agent/.env`)
 
